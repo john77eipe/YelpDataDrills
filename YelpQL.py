@@ -128,6 +128,14 @@ if __name__ == "__main__":
     #
     # Question 1: Avg rating and ambience of businesses with star rating > 4.5
     #
+    # Expected output:
+    #
+    #  +--------------------+-------------------+-----+
+    # | Ambience.romatic   |  Ambience. touristy  |   other ambience specific columns... | name|stars|
+    # +--------------------+-------------------+-----+
+    # |  1                 |   1                  |                                     | Stripper King|  5.0|
+    # |  1                 |   0                  |                                     | Ashkenaz Cowboy|  5.0|
+    #
 
     ambienceBusinessDF = businessDF.select("business_id", "stars") \
         .filter("stars > 4.5") \
@@ -136,11 +144,12 @@ if __name__ == "__main__":
         .join(businessDF, "business_id") \
         .filter("attributes.Ambience != '' and attributes.Ambience != 'None'") \
         .sort("stars") \
-        .select("attributes.Ambience", "name", "stars")
+        .select("attributes.Ambience", "name", "stars") \
+        .withColumn()
 
     ambienceBusinessDF.show(10)
-    # parsedAmbienceBusinessDF = util.parseJSONCols(spark, ambienceBusinessDF, False, "Ambience")
-    # parsedAmbienceBusinessDF.show(10)
+    parsedAmbienceBusinessDF = util.parseJSONCols(spark, ambienceBusinessDF, False, "Ambience")
+    parsedAmbienceBusinessDF.show(10)
 
     #
     # Question 2: Businesses review distribution for businesses star'd above 4
